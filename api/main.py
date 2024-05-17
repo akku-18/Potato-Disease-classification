@@ -1,5 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 import uvicorn
+from typing import Annotated
+
 
 app = FastAPI()
 
@@ -13,11 +15,13 @@ async def predict(
 ):
     pass
 
-@app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile):
-    return {"filename": file.filename}
-
+@app.post("/files")
+async def UploadImage(file: bytes = File(...)):
+    with open('image.jpg','wb') as image:
+        image.write(file)
+        image.close()
+    return 'got it'
 
 
 if __name__ == '__main__':
-    uvicorn.run(app,host='localhost', port = 8000)
+    uvicorn.run(app, host='localhost', port = 8000)
